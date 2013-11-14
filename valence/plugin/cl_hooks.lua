@@ -27,15 +27,18 @@ function PLUGIN:GetPlayerScoreboardOptions(player, options, menu)
 	end;
 
 	if (plyForceChar and Clockwork.player:HasFlags(Clockwork.Client, plyForceChar.access)) then
-		options["Force Character"] = {};
-
-		for k, v in pairs(CW_MASTER_MANIFEST) do
-			if (player:SteamID() == v.steamID) then
-				options["Force Character"][v.name] = function()
-					Clockwork.kernel:RunCommand("PlyForceChar", player:Name(), tostring(v.characterID));
+		if (CW_MASTER_MANIFEST) then
+			options["Force Character"] = {};
+			for k, v in pairs(CW_MASTER_MANIFEST) do
+				if (player:SteamID() == v.steamID) then
+					options["Force Character"][v.name] = function()
+						Clockwork.kernel:RunCommand("PlyForceChar", player:Name(), tostring(v.characterID));
+					end;
 				end;
-			end
-		end;
+			end;
+		else
+			options["Force Character"] = {"Couldn't Retrieve Characters" = function() end};
+		end
 	end;
 
 	if (plySlay and Clockwork.player:HasFlags(Clockwork.Client, plySlay.access)) then
